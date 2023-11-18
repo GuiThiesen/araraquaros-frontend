@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazer Solicitação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<form id="requestForm">
+    <label for="requestType">Tipo:</label>
+    <select id="requestType" name="requestType" required>
+        <option value="manutencao">Manutenção</option>
+        <option value="limpeza">Limpeza</option>
+        <option value="seguranca">Segurança</option>
+        <!-- Adicione outros tipos conforme necessário -->
+    </select>
+
+    <label for="requestStatus">Status:</label>
+    <input type="text" id="requestStatus" name="requestStatus" required>
+
+    <label for="requestPhone">Telefone:</label>
+    <input type="tel" id="requestPhone" name="requestPhone" required>
+
+    <label for="requestRole">Role:</label>
+    <input type="text" id="requestRole" name="requestRole" required>
+
+    <button type="button" onclick="submitRequest()">Enviar</button>
+</form>
+
+<script>
+    function submitRequest() {
+        var requestType = document.getElementById("requestType").value;
+        var requestStatus = document.getElementById("requestStatus").value;
+        var requestPhone = document.getElementById("requestPhone").value;
+        var requestRole = document.getElementById("requestRole").value;
+
+        // Aqui você pode enviar os dados para o backend ou realizar outras ações
+        console.log("Tipo:", requestType);
+        console.log("Status:", requestStatus);
+        console.log("Telefone:", requestPhone);
+        console.log("Role:", requestRole);
+    }
+</script>
+
+</body>
+</html>
