@@ -29,7 +29,8 @@
             margin-bottom: 8px;
         }
 
-        input, select {
+        input,
+        select {
             width: 100%;
             padding: 8px;
             margin-bottom: 15px;
@@ -79,18 +80,12 @@
             <!-- Adicione outros tipos conforme necessário -->
         </select>
 
-        <label for="requestStatus">Status:</label>
-        <input type="text" id="requestStatus" name="requestStatus" required>
-
-        <label for="requestPhone">Telefone:</label>
-        <input type="tel" id="requestPhone" name="requestPhone" required>
-
         <!-- Novo select para os locais -->
         <label for="requestLocation">Local:</label>
         <select id="requestLocation" name="requestLocation" required></select>
 
-        <label for="requestRole">Role:</label>
-        <input type="text" id="requestRole" name="requestRole" required>
+        <label for="RequestDescription">Descrição:</label>
+        <input type="text" id="RequestDescription" name="RequestDescription" required>
 
         <button type="button" onclick="submitRequest()">Enviar</button>
         <div>
@@ -102,13 +97,12 @@
         // Função para carregar dinamicamente os locais no select
         async function loadLocations() {
             try {
-                var response = await fetch('URL_DO_SEU_BACKEND/locais', {
+                var response = await fetch('http://0.0.0.0:8000/locais/', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         // Adicione outros cabeçalhos conforme necessário
                     },
-                    // Adicione informações de autenticação, se necessário
                 });
 
                 if (response.ok) {
@@ -134,20 +128,31 @@
 
         // Função para enviar a solicitação
         function submitRequest() {
+            var userId = sessionStorage.getItem('userId');
             var requestType = document.getElementById("requestType").value;
             var requestStatus = document.getElementById("requestStatus").value;
-            var requestPhone = document.getElementById("requestPhone").value;
             var requestLocation = document.getElementById("requestLocation").value;
-            var requestRole = document.getElementById("requestRole").value;
+            var requestDescription = document.getElementById("RequestDescription").value;
 
             // Simulação do envio para o backend (substitua por lógica real)
-            console.log("Enviando solicitação para o backend...");
+            var response = fetch('http://0.0.0.0:8000/solicitante/criarTicket', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Adicione outros cabeçalhos conforme necessário
+                },
+                body: JSON.stringify({
+                    solicitante_id: userId,
+                    tipo: RequestType,
+                    local_id: requestLocation,
+                    status: 'CRIADO',
+                    descricao: requestDescription
+                })
+            });
             console.log("Tipo:", requestType);
             console.log("Status:", requestStatus);
             console.log("Telefone:", requestPhone);
             console.log("Local:", requestLocation);
-            console.log("Role:", requestRole);
-
             // Simulação de resposta do backend (substitua por resposta real)
             console.log("Solicitação enviada com sucesso!");
 

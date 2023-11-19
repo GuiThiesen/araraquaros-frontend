@@ -50,8 +50,14 @@
     <table>
         <thead>
             <tr>
-                <th>Tipo</th>
+                <th>ID</th>
+                <th>Nome Solicitante</th>
+                <th>Analista ID</th>
+                <th>Nome Local</th>
+                <th>Nome Bloco</th>
                 <th>Status</th>
+                <th>Tipo</th>
+                <th>Data</th>
             </tr>
         </thead>
         <tbody id="ticketHistory">
@@ -66,13 +72,15 @@
                 // Obtenha o userId do sessionStorage
                 var userId = sessionStorage.getItem('userId');
 
-                var response = await fetch('URL_DO_SEU_BACKEND/historico/' + userId, {
-                    method: 'GET',
+                var response = await fetch('http://0.0.0.0:8000/solicitante/tickets', {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         // Adicione outros cabeçalhos conforme necessário
                     },
-                    // Adicione informações de autenticação, se necessário
+                    body: JSON.stringify({
+                        usuario_id: userId
+                    }),
                 });
 
                 if (response.ok) {
@@ -86,7 +94,7 @@
                         var idCell = document.createElement('td');
                         var nomeSolicitanteCell = document.createElement('td');
                         var solicitanteIdCell = document.createElement('td');
-                        var matriculaAnalistaCell = document.createElement('td');
+                        var matriculaAnalistsaCell = document.createElement('td');
                         var analistaIdCell = document.createElement('td');
                         var nomeLocalCell = document.createElement('td');
                         var nomeBlocoCell = document.createElement('td');
