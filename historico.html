@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico de Tickets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        a {
+            display: block;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<a href="requisicoes.html">Voltar para Solicitações</a>
+
+<h1>Histórico de Tickets</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody id="ticketHistory">
+        <!-- Aqui serão adicionados dinamicamente os tickets do histórico -->
+    </tbody>
+</table>
+
+<script>
+    // Simulação de dados do histórico (substitua por dados reais do backend)
+    var ticketHistoryData = [
+        { type: 'Manutenção', status: 'Concluído' },
+        { type: 'Limpeza', status: 'Em Progresso' },
+        // Adicione mais dados conforme necessário
+    ];
+
+    // Função para popular a tabela com os dados do histórico
+    function populateTicketHistory() {
+        var tableBody = document.getElementById('ticketHistory');
+
+        ticketHistoryData.forEach(function (ticket) {
+            var row = document.createElement('tr');
+            var typeCell = document.createElement('td');
+            var statusCell = document.createElement('td');
+
+            typeCell.textContent = ticket.type;
+            statusCell.textContent = ticket.status;
+
+            row.appendChild(typeCell);
+            row.appendChild(statusCell);
+
+            tableBody.appendChild(row);
+        });
+    }
+
+    // Chame a função ao carregar a página
+    window.onload = populateTicketHistory;
+</script>
+
+</body>
+</html>

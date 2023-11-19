@@ -49,6 +49,21 @@
         button:hover {
             background-color: #45a049;
         }
+
+        a {
+            display: block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -72,7 +87,11 @@
     <input type="text" id="requestRole" name="requestRole" required>
 
     <button type="button" onclick="submitRequest()">Enviar</button>
+    <div>
+        <a href="historico.html" class="history-link">Ver Histórico</a>
+    </div>
 </form>
+
 
 <script>
     function submitRequest() {
@@ -81,11 +100,16 @@
         var requestPhone = document.getElementById("requestPhone").value;
         var requestRole = document.getElementById("requestRole").value;
 
-        // Aqui você pode enviar os dados para o backend ou realizar outras ações
-        console.log("Tipo:", requestType);
-        console.log("Status:", requestStatus);
-        console.log("Telefone:", requestPhone);
-        console.log("Role:", requestRole);
+        // Simulação do envio para o backend (substitua por lógica real)
+        console.log("Enviando solicitação para o backend...");
+        // Simulação de resposta do backend (substitua por resposta real)
+        console.log("Solicitação enviada com sucesso!");
+
+        // Limpar campos após o envio
+        document.getElementById("requestType").value = "";
+        document.getElementById("requestStatus").value = "";
+        document.getElementById("requestPhone").value = "";
+        document.getElementById("requestRole").value = "";
     }
 </script>
 
