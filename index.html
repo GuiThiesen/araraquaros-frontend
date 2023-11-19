@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,150 +60,171 @@
         }
     </style>
 </head>
+
 <body>
 
-<div id="tabs">
-    <ul>
-        <li><a href="#loginTab">Login</a></li>
-        <li><a href="#registerTab">Cadastro</a></li>
-    </ul>
+    <div id="tabs">
+        <ul>
+            <li><a href="#loginTab">Login</a></li>
+            <li><a href="#registerTab">Cadastro</a></li>
+        </ul>
 
-    <!-- Login Tab -->
-    <div id="loginTab">
-        <form id="loginForm">
-            <label for="loginUsername">Usuário:</label>
-            <input type="text" id="loginUsername" name="loginUsername" required>
+        <!-- Login Tab -->
+        <div id="loginTab">
+            <form id="loginForm">
+                <label for="loginUsername">Usuário:</label>
+                <input type="text" id="loginUsername" name="loginUsername" required>
 
-            <label for="loginPassword">Senha:</label>
-            <input type="password" id="loginPassword" name="loginPassword" required>
+                <label for="loginPassword">Senha:</label>
+                <input type="password" id="loginPassword" name="loginPassword" required>
 
-            <button type="button" onclick="login()">Entrar</button>
-        </form>
+                <button type="button" onclick="login()">Entrar</button>
+            </form>
+        </div>
+
+        <!-- Register Tab -->
+        <div id="registerTab">
+            <form id="registerForm">
+                <label for="registerUsername">Usuário:</label>
+                <input type="text" id="registerUsername" name="registerUsername" required>
+
+                <label for="registerPassword">Senha:</label>
+                <input type="password" id="registerPassword" name="registerPassword" required>
+
+                <label for="registerEmail">E-mail:</label>
+                <input type="email" id="registerEmail" name="registerEmail" required>
+
+                <label for="registerPhone">Telefone:</label>
+                <input type="tel" id="registerPhone" name="registerPhone" required>
+
+                <!-- Corrigindo a abertura e fechamento do div para a "Role" -->
+                <div>
+                    <label for="requestType">Role:</label>
+                    <select id="requestType" name="requestType" required>
+                        <option value="solicitante">Solicitante</option>
+                        <option value="analista">Analista</option>
+                        <option value="administrador">Administrador</option>
+                    </select>
+                </div>
+                </select>
+                <div>
+                    <button type="button" onclick="register()">Cadastrar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    </form>
     </div>
 
-    <!-- Register Tab -->
-    <div id="registerTab">
-        <form id="registerForm">
-            <label for="registerUsername">Usuário:</label>
-            <input type="text" id="registerUsername" name="registerUsername" required>
+    <!-- Adicione outros tipos conforme necessário -->
 
-            <label for="registerPassword">Senha:</label>
-            <input type="password" id="registerPassword" name="registerPassword" required>
 
-            <label for="registerEmail">E-mail:</label>
-            <input type="email" id="registerEmail" name="registerEmail" required>
+    <script>
+        function login() {
+            var username = document.getElementById("loginUsername").value;
+            var password = document.getElementById("loginPassword").value;
 
-            <label for="registerPhone">Telefone:</label>
-            <input type="tel" id="registerPhone" name="registerPhone" required>
-
-            <button type="button" onclick="register()">Cadastrar</button>
-        </form>
-    </div>
-</div>
-
-<script>
-    function login() {
-        var username = document.getElementById("loginUsername").value;
-        var password = document.getElementById("loginPassword").value;
-
-        // Implemente a lógica de login aqui
-        console.log("Login:", username, password);
-    }
-
-    
-
-    function register() {
-        var username = document.getElementById("registerUsername").value;
-        var password = document.getElementById("registerPassword").value;
-        var email = document.getElementById("registerEmail").value;
-        var phone = document.getElementById("registerPhone").value;
-
-        // Implemente a lógica de cadastro aqui
-        console.log("Cadastro:", username, password, email, phone);
-    }
-
-    // Adiciona a funcionalidade de abas (tabs)
-    document.getElementById("tabs").addEventListener("click", function (event) {
-        if (event.target.tagName === "A") {
-            var tabId = event.target.getAttribute("href").substr(1);
-            showTab(tabId);
-        }
-    });
-
-    function showTab(tabId) {
-        var tabs = document.querySelectorAll("#tabs > div");
-        for (var i = 0; i < tabs.length; i++) {
-            tabs[i].style.display = "none";
+            // Implemente a lógica de login aqui
+            console.log("Login:", username, password);
         }
 
-        document.getElementById(tabId).style.display = "block";
-    }
 
-    // Mostra a aba de login por padrão
-    showTab("loginTab");
 
-    async function login() {
-        var username = document.getElementById("loginUsername").value;
-        var password = document.getElementById("loginPassword").value;
+        function register() {
+            var username = document.getElementById("registerUsername").value;
+            var password = document.getElementById("registerPassword").value;
+            var email = document.getElementById("registerEmail").value;
+            var phone = document.getElementById("registerPhone").value;
 
-        try {
-            var response = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password,
-                }),
-            });
+            // Implemente a lógica de cadastro aqui
+            console.log("Cadastro:", username, password, email, phone);
+        }
 
-            if (response.ok) {
-                // O login foi bem-sucedido, você pode redirecionar o usuário ou realizar outras ações necessárias.
-                console.log('Login bem-sucedido!');
-            } else {
-                // O login falhou, você pode exibir uma mensagem de erro para o usuário.
-                console.error('Falha no login');
+        // Adiciona a funcionalidade de abas (tabs)
+        document.getElementById("tabs").addEventListener("click", function (event) {
+            if (event.target.tagName === "A") {
+                var tabId = event.target.getAttribute("href").substr(1);
+                showTab(tabId);
             }
-        } catch (error) {
-            console.error('Erro ao fazer login:', error);
-        }
-    }
-    //Logica de registro do usuário
-    async function register() {
-    var username = document.getElementById("registerUsername").value;
-    var password = document.getElementById("registerPassword").value;
-    var email = document.getElementById("registerEmail").value;
-    var phone = document.getElementById("registerPhone").value;
-
-    try {
-        var response = await fetch('/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password,
-                email: email,
-                phone: phone,
-            }),
         });
 
-        if (response.ok) {
-            // O registro foi bem-sucedido, você pode redirecionar o usuário ou realizar outras ações necessárias.
-            console.log('Cadastro bem-sucedido!');
-        } else {
-            // O registro falhou, você pode exibir uma mensagem de erro para o usuário.
-            console.error('Falha no cadastro');
-        }
-    } catch (error) {
-        console.error('Erro ao fazer cadastro:', error);
-    }
-}
+        function showTab(tabId) {
+            var tabs = document.querySelectorAll("#tabs > div");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = "none";
+            }
 
-</script>
+            document.getElementById(tabId).style.display = "block";
+        }
+
+        // Mostra a aba de login por padrão
+        showTab("loginTab");
+
+        async function login() {
+            var username = document.getElementById("loginUsername").value;
+            var password = document.getElementById("loginPassword").value;
+
+            try {
+                var response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                    }),
+                });
+
+                if (response.ok) {
+                    // O login foi bem-sucedido, você pode redirecionar o usuário ou realizar outras ações necessárias.
+                    console.log('Login bem-sucedido!');
+                } else {
+                    // O login falhou, você pode exibir uma mensagem de erro para o usuário.
+                    console.error('Falha no login');
+                }
+            } catch (error) {
+                console.error('Erro ao fazer login:', error);
+            }
+        }
+        //Logica de registro do usuário
+        async function register() {
+            var username = document.getElementById("registerUsername").value;
+            var password = document.getElementById("registerPassword").value;
+            var email = document.getElementById("registerEmail").value;
+            var phone = document.getElementById("registerPhone").value;
+            var role = document.getElementById("registerRole").value;
+
+            try {
+                var response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        email: email,
+                        phone: phone,
+                    }),
+                });
+
+                if (response.ok) {
+                    // O registro foi bem-sucedido, você pode redirecionar o usuário ou realizar outras ações necessárias.
+                    console.log('Cadastro bem-sucedido!');
+                } else {
+                    // O registro falhou, você pode exibir uma mensagem de erro para o usuário.
+                    console.error('Falha no cadastro');
+                }
+            } catch (error) {
+                console.error('Erro ao fazer cadastro:', error);
+            }
+        }
+
+    </script>
 
 
 </body>
+
 </html>
