@@ -166,7 +166,7 @@
             var password = document.getElementById("loginPassword").value;
 
             try {
-                var response = await fetch('0.0.0.0:8000/login', {
+                var response = await fetch('http://0.0.0.0:8000/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -197,7 +197,7 @@
             var role = document.getElementById("registerRole").value;
 
             try {
-                var response = await fetch('0.0.0.0:8000/solicitante/create', {
+                var response = await fetch('http://0.0.0.0:8000/solicitante/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
