@@ -109,6 +109,8 @@
         console.log("Login:", username, password);
     }
 
+    
+
     function register() {
         var username = document.getElementById("registerUsername").value;
         var password = document.getElementById("registerPassword").value;
@@ -166,8 +168,39 @@
             console.error('Erro ao fazer login:', error);
         }
     }
+    //Logica de registro do usuário
+    async function register() {
+    var username = document.getElementById("registerUsername").value;
+    var password = document.getElementById("registerPassword").value;
+    var email = document.getElementById("registerEmail").value;
+    var phone = document.getElementById("registerPhone").value;
 
-    // Restante do seu código...
+    try {
+        var response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                email: email,
+                phone: phone,
+            }),
+        });
+
+        if (response.ok) {
+            // O registro foi bem-sucedido, você pode redirecionar o usuário ou realizar outras ações necessárias.
+            console.log('Cadastro bem-sucedido!');
+        } else {
+            // O registro falhou, você pode exibir uma mensagem de erro para o usuário.
+            console.error('Falha no cadastro');
+        }
+    } catch (error) {
+        console.error('Erro ao fazer cadastro:', error);
+    }
+}
+
 </script>
 
 
