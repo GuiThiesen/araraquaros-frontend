@@ -138,7 +138,38 @@
 
     // Mostra a aba de login por padrão
     showTab("loginTab");
+
+    async function login() {
+        var username = document.getElementById("loginUsername").value;
+        var password = document.getElementById("loginPassword").value;
+
+        try {
+            var response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            });
+
+            if (response.ok) {
+                // O login foi bem-sucedido, você pode redirecionar o usuário ou realizar outras ações necessárias.
+                console.log('Login bem-sucedido!');
+            } else {
+                // O login falhou, você pode exibir uma mensagem de erro para o usuário.
+                console.error('Falha no login');
+            }
+        } catch (error) {
+            console.error('Erro ao fazer login:', error);
+        }
+    }
+
+    // Restante do seu código...
 </script>
+
 
 </body>
 </html>
