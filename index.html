@@ -160,8 +160,9 @@
                 });
 
                 if (response.ok) {
-                    // O login foi bem-sucedido, você pode redirecionar o usuário ou realizar outras ações necessárias.
+                    // O login foi bem-sucedido, redirecione o usuário para a página de requisições.
                     console.log('Login bem-sucedido!');
+                    window.location.href = 'requisicoes.html';
                 } else {
                     // O login falhou, você pode exibir uma mensagem de erro para o usuário.
                     console.error('Falha no login');
@@ -170,6 +171,7 @@
                 console.error('Erro ao fazer login:', error);
             }
         }
+
         //Logica de registro do usuário
         async function register() {
             var username = document.getElementById("registerUsername").value;
