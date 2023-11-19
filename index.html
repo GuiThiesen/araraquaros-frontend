@@ -101,12 +101,17 @@
                 <!-- Corrigindo a abertura e fechamento do div para a "Role" -->
                 <div>
                     <label for="registerRole">Role:</label>
-                    <select id="registerRole" name="registerRole" required>
+                    <select id="registerRole" name="registerRole" required onchange="toggleMatriculaField()">
                         <option value="solicitante">Solicitante</option>
                         <option value="analista">Analista</option>
                         <option value="administrador">Administrador</option>
                     </select>
                 </div>
+                <div id="matriculaField" style="display: none;">
+                    <label for="registerMatricula">Número de Matrícula:</label>
+                    <input type="text" id="registerMatricula" name="registerMatricula" required>
+                </div>
+
 
                 <div>
                     <button type="button" onclick="register()">Cadastrar</button>
@@ -212,6 +217,22 @@
                 }
             } catch (error) {
                 console.error('Erro ao fazer cadastro:', error);
+            }
+        }
+
+
+        window.onload = function () {
+        toggleMatriculaField();
+    };
+
+        function toggleMatriculaField() {
+            var roleSelect = document.getElementById("registerRole");
+            var matriculaField = document.getElementById("matriculaField");
+
+            if (roleSelect.value === "analista") {
+                matriculaField.style.display = "block";
+            } else {
+                matriculaField.style.display = "none";
             }
         }
 
