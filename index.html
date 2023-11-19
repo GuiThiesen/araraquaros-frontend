@@ -175,7 +175,11 @@
                     sessionStorage.setItem('userId', userId);
                     sessionStorage.setItem('admin', admin);
 
-                    window.location.href = 'requisicoes.html';
+                    if (admin) {
+                        window.location.href = 'requisicoes.html';
+                    } else {
+                        window.location.href = 'historico.html';
+                    }
                 } else {
                     // O login falhou, você pode exibir uma mensagem de erro para o usuário.
                     console.error('Falha no login');
