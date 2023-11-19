@@ -166,14 +166,14 @@
             var password = document.getElementById("loginPassword").value;
 
             try {
-                var response = await fetch('/api/login', {
+                var response = await fetch('0.0.0.0:8000/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        username: username,
-                        password: password,
+                        login: username,
+                        senha: password,
                     }),
                 });
 
@@ -197,16 +197,17 @@
             var role = document.getElementById("registerRole").value;
 
             try {
-                var response = await fetch('/api/register', {
+                var response = await fetch('0.0.0.0:8000/solicitante/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        username: username,
-                        password: password,
+                        nome: username,
+                        senha: password,
                         email: email,
-                        phone: phone,
+                        telefone: phone,
+                        role: role
                     }),
                 });
 
