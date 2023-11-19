@@ -84,8 +84,13 @@
         <label for="requestLocation">Local:</label>
         <select id="requestLocation" name="requestLocation" required></select>
 
+        <!-- Campo para a descrição -->
         <label for="RequestDescription">Descrição:</label>
         <input type="text" id="RequestDescription" name="RequestDescription" required>
+
+        <!-- Campo para a imagem -->
+        <label for="imageInput">Escolha uma imagem:</label>
+        <input type="file" id="imageInput" name="imageInput" accept="image/*">
 
         <button type="button" onclick="submitRequest()">Enviar</button>
         <div>
@@ -133,30 +138,39 @@
             var requestLocation = document.getElementById("requestLocation").value;
             var requestDescription = document.getElementById("RequestDescription").value;
 
-            // Simulação do envio para o backend (substitua por lógica real)
-            var response = fetch('http://0.0.0.0:8000/solicitante/criarTicket', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Adicione outros cabeçalhos conforme necessário
-                },
-                body: JSON.stringify({
-                    solicitante_id: userId,
-                    tipo: requestType,
-                    local_id: requestLocation,
-                    status: 'CRIADO',
-                    descricao: requestDescription
-                })
-            });
-            console.log("Tipo:", requestType);
-            console.log("Local:", requestLocation);
-            // Simulação de resposta do backend (substitua por resposta real)
-            console.log("Solicitação enviada com sucesso!");
+            // Obter a referência para o campo de input de arquivo
+            var imageInput = document.getElementById('imageInput');
+            // Obter o arquivo de imagem selecionado
+            var selectedImage = imageInput.files[0];
 
-            // Limpar campos após o envio
-            document.getElementById("requestType").value = "";
-            document.getElementById("requestLocation").value = "";
-            document.getElementById("requestRole").value = "";
+            // Criar um objeto FormData e adicionar a imagem a ele
+            var formData = new FormData();
+            formData.append('imagem', selectedImage);
+
+            // Adicionar outros campos ao FormData, se necessário
+            formData.append('solicitante_id', userId);
+            formData.append('tipo', requestType);
+            formData.append('local_id', requestLocation);
+            formData.append('status', 'CRIADO');
+            formData.append('descricao', requestDescription);
+
+            // Simulação do envio para o backend (substitua por lógica real)
+            fetch('http://0.0.0.0:8000/solicitante/criarTicket', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Solicitação enviada com sucesso:', data);
+                // Limpar campos após o envio, se necessário
+                document.getElementById("requestType").value = "";
+                document.getElementById("requestLocation").value = "";
+                document.getElementById("RequestDescription").value = "";
+                imageInput.value = ""; // Limpar o campo de arquivo
+            })
+            .catch(error => {
+                console.error('Erro ao enviar a solicitação:', error);
+            });
         }
     </script>
 
