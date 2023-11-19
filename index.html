@@ -160,13 +160,21 @@
                     },
                     body: JSON.stringify({
                         email: username,
-                        senha: password,
+                        senha: password
                     }),
                 });
 
                 if (response.ok) {
                     // O login foi bem-sucedido, redirecione o usuário para a página de requisições.
                     console.log('Login bem-sucedido!');
+                    var responseData = await response.json();
+                    var userId = responseData.id; // Substitua 'id' pelo nome real do campo que contém o ID na resposta
+                    var admin = responseData.admin; // Substitua 'id' pelo nome real do campo que contém o ID na resposta
+
+                    // Armazene o ID do usuário na sessionStorage
+                    sessionStorage.setItem('userId', userId);
+                    sessionStorage.setItem('admin', admin);
+
                     window.location.href = 'requisicoes.html';
                 } else {
                     // O login falhou, você pode exibir uma mensagem de erro para o usuário.
@@ -204,13 +212,6 @@
                     // O registro foi bem-sucedido, você pode redirecionar o usuário ou realizar outras ações necessárias.
                     console.log('Cadastro bem-sucedido!');
 
-                    // Acesse o ID do usuário na resposta JSON
-                    var responseData = await response.json();
-                    var userId = responseData.id; // Substitua 'id' pelo nome real do campo que contém o ID na resposta
-
-                    // Armazene o ID do usuário na sessionStorage
-                    sessionStorage.setItem('userId', userId);
-
                 } else {
                     // O registro falhou, você pode exibir uma mensagem de erro para o usuário.
                     console.error('Falha no cadastro');
@@ -222,8 +223,8 @@
 
 
         window.onload = function () {
-        toggleMatriculaField();
-    };
+            toggleMatriculaField();
+        };
 
         function toggleMatriculaField() {
             var roleSelect = document.getElementById("registerRole");
