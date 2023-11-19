@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,52 +67,99 @@
         }
     </style>
 </head>
+
 <body>
 
-<form id="requestForm">
-    <label for="requestType">Tipo:</label>
-    <select id="requestType" name="requestType" required>
-        <option value="manutencao">Manutenção</option>
-        <option value="limpeza">Limpeza</option>
-        <option value="seguranca">Segurança</option>
-        <!-- Adicione outros tipos conforme necessário -->
-    </select>
+    <form id="requestForm">
+        <label for="requestType">Tipo:</label>
+        <select id="requestType" name="requestType" required>
+            <option value="manutencao">Manutenção</option>
+            <option value="limpeza">Limpeza</option>
+            <option value="seguranca">Segurança</option>
+            <!-- Adicione outros tipos conforme necessário -->
+        </select>
 
-    <label for="requestStatus">Status:</label>
-    <input type="text" id="requestStatus" name="requestStatus" required>
+        <label for="requestStatus">Status:</label>
+        <input type="text" id="requestStatus" name="requestStatus" required>
 
-    <label for="requestPhone">Telefone:</label>
-    <input type="tel" id="requestPhone" name="requestPhone" required>
+        <label for="requestPhone">Telefone:</label>
+        <input type="tel" id="requestPhone" name="requestPhone" required>
 
-    <label for="requestRole">Role:</label>
-    <input type="text" id="requestRole" name="requestRole" required>
+        <!-- Novo select para os locais -->
+        <label for="requestLocation">Local:</label>
+        <select id="requestLocation" name="requestLocation" required></select>
 
-    <button type="button" onclick="submitRequest()">Enviar</button>
-    <div>
-        <a href="historico.html" class="history-link">Ver Histórico</a>
-    </div>
-</form>
+        <label for="requestRole">Role:</label>
+        <input type="text" id="requestRole" name="requestRole" required>
 
+        <button type="button" onclick="submitRequest()">Enviar</button>
+        <div>
+            <a href="historico.html" class="history-link">Ver Histórico</a>
+        </div>
+    </form>
 
-<script>
-    function submitRequest() {
-        var requestType = document.getElementById("requestType").value;
-        var requestStatus = document.getElementById("requestStatus").value;
-        var requestPhone = document.getElementById("requestPhone").value;
-        var requestRole = document.getElementById("requestRole").value;
+    <script>
+        // Função para carregar dinamicamente os locais no select
+        async function loadLocations() {
+            try {
+                var response = await fetch('URL_DO_SEU_BACKEND/locais', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Adicione outros cabeçalhos conforme necessário
+                    },
+                    // Adicione informações de autenticação, se necessário
+                });
 
-        // Simulação do envio para o backend (substitua por lógica real)
-        console.log("Enviando solicitação para o backend...");
-        // Simulação de resposta do backend (substitua por resposta real)
-        console.log("Solicitação enviada com sucesso!");
+                if (response.ok) {
+                    var locationsData = await response.json();
+                    var selectLocation = document.getElementById('requestLocation');
 
-        // Limpar campos após o envio
-        document.getElementById("requestType").value = "";
-        document.getElementById("requestStatus").value = "";
-        document.getElementById("requestPhone").value = "";
-        document.getElementById("requestRole").value = "";
-    }
-</script>
+                    locationsData.forEach(function (location) {
+                        var option = document.createElement('option');
+                        option.value = location.id;
+                        option.textContent = location.nome;
+                        selectLocation.appendChild(option);
+                    });
+                } else {
+                    console.error('Falha ao obter dados dos locais:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Erro ao obter dados dos locais:', error);
+            }
+        }
+
+        // Chame a função para carregar locais ao carregar a página
+        window.onload = loadLocations;
+
+        // Função para enviar a solicitação
+        function submitRequest() {
+            var requestType = document.getElementById("requestType").value;
+            var requestStatus = document.getElementById("requestStatus").value;
+            var requestPhone = document.getElementById("requestPhone").value;
+            var requestLocation = document.getElementById("requestLocation").value;
+            var requestRole = document.getElementById("requestRole").value;
+
+            // Simulação do envio para o backend (substitua por lógica real)
+            console.log("Enviando solicitação para o backend...");
+            console.log("Tipo:", requestType);
+            console.log("Status:", requestStatus);
+            console.log("Telefone:", requestPhone);
+            console.log("Local:", requestLocation);
+            console.log("Role:", requestRole);
+
+            // Simulação de resposta do backend (substitua por resposta real)
+            console.log("Solicitação enviada com sucesso!");
+
+            // Limpar campos após o envio
+            document.getElementById("requestType").value = "";
+            document.getElementById("requestStatus").value = "";
+            document.getElementById("requestPhone").value = "";
+            document.getElementById("requestLocation").value = "";
+            document.getElementById("requestRole").value = "";
+        }
+    </script>
 
 </body>
+
 </html>
