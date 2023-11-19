@@ -57,35 +57,74 @@
 </table>
 
 <script>
-    // Simulação de dados do histórico (substitua por dados reais do backend)
-    var ticketHistoryData = [
-        { type: 'Manutenção', status: 'Concluído' },
-        { type: 'Limpeza', status: 'Em Progresso' },
-        // Adicione mais dados conforme necessário
-    ];
-
     // Função para popular a tabela com os dados do histórico
-    function populateTicketHistory() {
-        var tableBody = document.getElementById('ticketHistory');
+    async function populateTicketHistory() {
+        try {
+            var response = await fetch('URL_DO_SEU_BACKEND/historico', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Adicione outros cabeçalhos conforme necessário
+                },
+                // Adicione informações de autenticação, se necessário
+            });
 
-        ticketHistoryData.forEach(function (ticket) {
-            var row = document.createElement('tr');
-            var typeCell = document.createElement('td');
-            var statusCell = document.createElement('td');
+            if (response.ok) {
+                var ticketHistoryData = await response.json();
 
-            typeCell.textContent = ticket.type;
-            statusCell.textContent = ticket.status;
+                var tableBody = document.getElementById('ticketHistory');
+                tableBody.innerHTML = ''; // Limpa a tabela antes de adicionar os novos dados
 
-            row.appendChild(typeCell);
-            row.appendChild(statusCell);
+                ticketHistoryData.forEach(function (ticket) {
+                    var row = document.createElement('tr');
+                    var idCell = document.createElement('td');
+                    var nomeSolicitanteCell = document.createElement('td');
+                    var solicitanteIdCell = document.createElement('td');
+                    var matriculaAnalistaCell = document.createElement('td');
+                    var analistaIdCell = document.createElement('td');
+                    var nomeLocalCell = document.createElement('td');
+                    var nomeBlocoCell = document.createElement('td');
+                    var statusCell = document.createElement('td');
+                    var tipoCell = document.createElement('td');
+                    var dataCell = document.createElement('td');
 
-            tableBody.appendChild(row);
-        });
+                    idCell.textContent = ticket.id;
+                    nomeSolicitanteCell.textContent = ticket.nome_solicitante;
+                    solicitanteIdCell.textContent = ticket.solicitante_id;
+                    matriculaAnalistaCell.textContent = ticket.matricula_analista;
+                    analistaIdCell.textContent = ticket.analista_id;
+                    nomeLocalCell.textContent = ticket.nome_local;
+                    nomeBlocoCell.textContent = ticket.nome_bloco;
+                    statusCell.textContent = ticket.status;
+                    tipoCell.textContent = ticket.tipo;
+                    dataCell.textContent = ticket.data;
+
+                    row.appendChild(idCell);
+                    row.appendChild(nomeSolicitanteCell);
+                    row.appendChild(solicitanteIdCell);
+                    row.appendChild(matriculaAnalistaCell);
+                    row.appendChild(analistaIdCell);
+                    row.appendChild(nomeLocalCell);
+                    row.appendChild(nomeBlocoCell);
+                    row.appendChild(statusCell);
+                    row.appendChild(tipoCell);
+                    row.appendChild(dataCell);
+
+                    tableBody.appendChild(row);
+                });
+            } else {
+                console.error('Falha ao obter dados do histórico:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Erro ao obter dados do histórico:', error);
+        }
     }
 
     // Chame a função ao carregar a página
     window.onload = populateTicketHistory;
 </script>
+
+
 
 </body>
 </html>
