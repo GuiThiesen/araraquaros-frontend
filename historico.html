@@ -71,17 +71,33 @@
             try {
                 // Obtenha o userId do sessionStorage
                 var userId = sessionStorage.getItem('userId');
+                var isAdmin = sessionStorage.getItem('admin');
 
-                var response = await fetch('http://0.0.0.0:8000/solicitante/tickets', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Adicione outros cabeçalhos conforme necessário
-                    },
-                    body: JSON.stringify({
-                        usuario_id: userId
-                    }),
-                });
+
+                if (!isAdmin) {
+                    var response = await fetch('http://0.0.0.0:8000/solicitante/tickets', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // Adicione outros cabeçalhos conforme necessário
+                        },
+                        body: JSON.stringify({
+                            usuario_id: userId
+                        }),
+                    });
+                } else {
+                    var response = await fetch('http://0.0.0.0:8000/tickets/admin', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // Adicione outros cabeçalhos conforme necessário
+                        },
+                        body: JSON.stringify({
+                            usuario_id: userId
+                        })
+                    });
+                }
+
 
                 if (response.ok) {
                     var ticketHistoryData = await response.json();
