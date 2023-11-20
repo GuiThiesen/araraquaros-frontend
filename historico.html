@@ -71,17 +71,53 @@
             try {
                 // Obtenha o userId do sessionStorage
                 var userId = sessionStorage.getItem('userId');
+                var isAdmin = sessionStorage.getItem('admin');
+                var role = sessionStorage.getItem('userRole');
 
-                var response = await fetch('http://0.0.0.0:8000/solicitante/tickets', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Adicione outros cabeçalhos conforme necessário
-                    },
-                    body: JSON.stringify({
-                        usuario_id: userId
-                    }),
-                });
+
+                switch (role) {
+                    case 'solicitante':
+                        var response = await fetch('http://0.0.0.0:8000/solicitante/tickets', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                // Adicione outros cabeçalhos conforme necessário
+                            },
+                            body: JSON.stringify({
+                                usuario_id: userId
+                            }),
+                        });
+
+                        break;
+                    case 'analista':
+                        var response = await fetch('http://0.0.0.0:8000/tickets/admin', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                // Adicione outros cabeçalhos conforme necessário
+                            },
+                            body: JSON.stringify({
+                                usuario_id: userId
+                            })
+                        });
+
+                        break;
+                    case 'administrador':
+                        var response = await fetch('http://0.0.0.0:8000/analista/tickets', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                // Adicione outros cabeçalhos conforme necessário
+                            },
+                            body: JSON.stringify({
+                                usuario_id: userId
+                            })
+                        });
+                        break;
+                    default:
+                        break;
+                }
+
 
                 if (response.ok) {
                     var ticketHistoryData = await response.json();

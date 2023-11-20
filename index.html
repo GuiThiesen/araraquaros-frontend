@@ -149,6 +149,8 @@
         showTab("loginTab");
 
         async function login() {
+            sessionStorage.clear();
+
             var username = document.getElementById("loginUsername").value;
             var password = document.getElementById("loginPassword").value;
 
@@ -170,12 +172,29 @@
                     var responseData = await response.json();
                     var userId = responseData.id; // Substitua 'id' pelo nome real do campo que contém o ID na resposta
                     var admin = responseData.admin; // Substitua 'id' pelo nome real do campo que contém o ID na resposta
+                    var role = responseData.role; // Substitua 'id' pelo nome real do campo que contém o ID na resposta
 
                     // Armazene o ID do usuário na sessionStorage
                     sessionStorage.setItem('userId', userId);
                     sessionStorage.setItem('admin', admin);
+                    sessionStorage.setItem('userRole', role);
 
-                    window.location.href = 'requisicoes.html';
+                    switch (role) {
+                        case 'solicitante':
+                            window.location.href = 'requisicoes.html';
+
+                            break;
+                        case 'analista':
+                            window.location.href = 'historico.html';
+                            break;
+
+                        case 'administrador':
+                            window.location.href = 'historico.html';
+                            break;
+                        default:
+                            break;
+                    }
+
                 } else {
                     // O login falhou, você pode exibir uma mensagem de erro para o usuário.
                     console.error('Falha no login');
