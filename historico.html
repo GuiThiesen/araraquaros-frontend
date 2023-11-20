@@ -233,7 +233,7 @@
                         row.appendChild(dataCell);
                         row.appendChild(detalhesCeil);
 
-                        if ((role == 'analista' && ticket.status == 'CRIADO') || (role == 'solicitante' && ticket.status == 'EM ANDAMENTO')) {
+                        if ((role == 'analista' && ticket.status != 'RESOLVIDO') || (role == 'solicitante' && ticket.status == 'EM ANDAMENTO')) {
                             document.getElementById('resolveTicketHeader').style.display = 'table-cell';
                             document.getElementById('marcaResolvido').style.display = 'table-cell';
                             var resolveTicketCell = document.createElement('td');
