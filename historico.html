@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <title>Histórico de Tickets</title>
     <style>
         body {
@@ -75,14 +79,33 @@
                 <th>Status</th>
                 <th>Tipo</th>
                 <th>Data</th>
+                <th id="detalhesHeader">Detalhes</th>
+                <th id="resolveTicketHeader">Resolver Ticket</th>
             </tr>
         </thead>
         <tbody id="ticketHistory">
             <!-- Aqui serão adicionados dinamicamente os tickets do histórico -->
         </tbody>
     </table>
+    <div class="modal fade" id="detalhesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalhes do Ticket</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="mensagemContainer">
+                    <!-- Aqui será adicionado dinamicamente as mensagens -->
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
+
         // Função para popular a tabela com os dados do histórico
         async function populateTicketHistory() {
             try {
@@ -91,6 +114,7 @@
                 var isAdmin = sessionStorage.getItem('admin');
                 var role = sessionStorage.getItem('userRole');
 
+                document.getElementById('resolveTicketHeader').style.display = 'none';
 
                 switch (role) {
                     case 'solicitante':
@@ -107,6 +131,9 @@
 
                         break;
                     case 'analista':
+
+                        document.getElementById('resolveTicketHeader').style.display = 'table-cell';
+
                         var response = await fetch('http://0.0.0.0:8000/analista/tickets', {
                             method: 'POST',
                             headers: {
@@ -155,6 +182,7 @@
                         var tipoCell = document.createElement('td');
                         var dataCell = document.createElement('td');
 
+
                         idCell.textContent = ticket.id;
                         nomeSolicitanteCell.textContent = ticket.nome_solicitante;
                         analistaIdCell.textContent = ticket.analista_id !== null ? ticket.analista_id : 'N/A'; // Tratar valor nulo ou vazio
@@ -162,7 +190,14 @@
                         nomeBlocoCell.textContent = ticket.nome_bloco;
                         statusCell.textContent = ticket.status;
                         tipoCell.textContent = ticket.tipo;
-                        dataCell.textContent = ticket.data; // Substituir pela função de formatação adequada
+                        dataCell.textContent = ticket.data;
+                        var detalhesCeil = document.createElement('td');
+                        var detalheButton = document.createElement('button');
+                        detalheButton.textContent = 'Detalhes';
+                        detalheButton.onclick = function () {
+                            detalhesTicket(ticket.id);
+                        };
+                        detalhesCeil.appendChild(detalheButton);
 
                         row.appendChild(idCell);
                         row.appendChild(nomeSolicitanteCell);
@@ -172,6 +207,18 @@
                         row.appendChild(statusCell);
                         row.appendChild(tipoCell);
                         row.appendChild(dataCell);
+                        row.appendChild(detalhesCeil);
+
+                        if (role === 'analista') {
+                            var resolveTicketCell = document.createElement('td');
+                            var resolveButton = document.createElement('button');
+                            resolveButton.textContent = 'Resolver';
+                            resolveButton.onclick = function () {
+                                resolverTicket(ticket.id);
+                            };
+                            resolveTicketCell.appendChild(resolveButton);
+                            row.appendChild(resolveTicketCell);
+                        }
 
                         tableBody.appendChild(row);
                     });
@@ -185,6 +232,37 @@
                 console.error('Erro ao obter dados do histórico:', error);
             }
         }
+
+        function resolverTicket(ticketId) {
+            // Adicione aqui a lógica para resolver o ticket com o ID fornecido
+            alert('Resolver Ticket ID: ' + ticketId);
+        }
+
+        async function detalhesTicket(ticketId) {
+
+            $('#mensagemContainer').empty();
+            var response = await fetch('http://0.0.0.0:8000/solicitante/' + ticketId + '/mensagens', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Adicione outros cabeçalhos conforme necessário
+                }
+            });
+            if (response.ok) {
+                var mensagens = await response.json();
+
+                mensagens.forEach(function (mensagem) {
+                    var mensagemDiv = document.createElement('div');
+                    mensagemDiv.innerHTML = `<p><strong>${mensagem.nome_usuario}</strong>: ${mensagem.mensagem} - ${mensagem.data}</p>`;
+                    $('#mensagemContainer').append(mensagemDiv);
+
+                });
+
+                // Exibe o modal
+                $('#detalhesModal').modal('show');
+            }
+        }
+
 
         // Chame a função ao carregar a página
         window.onload = populateTicketHistory;
