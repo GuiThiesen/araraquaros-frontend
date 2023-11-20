@@ -80,7 +80,7 @@
                 <th>Tipo</th>
                 <th>Data</th>
                 <th id="detalhesHeader">Detalhes</th>
-                <th id="resolveTicketHeader">Resolver Ticket</th>
+                <th id="resolveTicketHeader">Responder</th>
             </tr>
         </thead>
         <tbody id="ticketHistory">
@@ -99,6 +99,32 @@
                 </div>
                 <div class="modal-body" id="mensagemContainer">
                     <!-- Aqui será adicionado dinamicamente as mensagens -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="responderModal" tabindex="-1" role="dialog" aria-labelledby="responderModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="responderModalLabel">Responder ao Ticket</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Input para a mensagem -->
+                    <div class="form-group">
+                        <label for="respostaTicket">Mensagem:</label>
+                        <textarea class="form-control" id="respostaTicket" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Botão para enviar a resposta -->
+                    <button type="button" class="btn btn-primary" id="responderButton">Enviar
+                        Resposta</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                 </div>
             </div>
         </div>
@@ -209,12 +235,12 @@
                         row.appendChild(dataCell);
                         row.appendChild(detalhesCeil);
 
-                        if (role === 'analista') {
+                        if (role === 'analista' || (role == 'solicitante' && ticket.status == 'EM ANDAMENTO')) {
                             var resolveTicketCell = document.createElement('td');
                             var resolveButton = document.createElement('button');
-                            resolveButton.textContent = 'Resolver';
+                            resolveButton.textContent = 'Responder';
                             resolveButton.onclick = function () {
-                                resolverTicket(ticket.id);
+                                resolverTicket(ticket.id, userId, ticket.status);
                             };
                             resolveTicketCell.appendChild(resolveButton);
                             row.appendChild(resolveTicketCell);
@@ -233,9 +259,47 @@
             }
         }
 
-        function resolverTicket(ticketId) {
-            // Adicione aqui a lógica para resolver o ticket com o ID fornecido
-            alert('Resolver Ticket ID: ' + ticketId);
+        async function resolverTicket(ticketId, userId, status) {
+            $('#responderModal').modal('show');
+
+            var enviarMensagem = document.getElementById('responderButton');
+            enviarMensagem.onclick = function () {
+                enviarResposta(ticketId, userId, status);
+            };
+        }
+
+        async function enviarResposta(ticketId, userId, status) {
+            $('#responderModal').modal('show');
+            var mensagem = document.getElementById('respostaTicket').value;
+
+            fetch('http://0.0.0.0:8000/solicitante/' + ticketId + '/cadastrarMensagem', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Adicione outros cabeçalhos conforme necessário
+                },
+                body: JSON.stringify({
+                    usuario_id: userId,
+                    mensagem: mensagem
+                })
+            });
+
+            if (status == 'CRIADO') {
+                await fetch('http://0.0.0.0:8000/ticket/' + ticketId + '/status', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Adicione outros cabeçalhos conforme necessário
+                    },
+                    body: JSON.stringify({
+                        analista_id: userId,
+                        status: 'EM ANDAMENTO'
+                    })
+                });
+            }
+
+
+            $('#responderModal').modal('hide');
         }
 
         async function detalhesTicket(ticketId) {
