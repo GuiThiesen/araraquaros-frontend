@@ -96,9 +96,26 @@
         <div>
             <a href="historico.html" class="history-link">Ver Histórico</a>
         </div>
+
+        <!-- Botão para ir para a página de administrador -->
+        <button id="adminButton" onclick="goToAdminPage()">Ir para Admin</button>
     </form>
+    
 
     <script>
+        // Lógica para mostrar o botão de admin apenas se o usuário for administrador
+        window.onload = function () {
+            var userRole = sessionStorage.getItem('userRole');
+
+            if (userRole && userRole.toLowerCase() === 'administrador') {
+                document.getElementById('adminButton').style.display = 'block';
+            }
+        };
+
+        // Função para redirecionar para a página de administrador
+        function goToAdminPage() {
+            window.location.href = 'administrador.html';
+        }
         // Função para carregar dinamicamente os locais no select
         async function loadLocations() {
             try {
