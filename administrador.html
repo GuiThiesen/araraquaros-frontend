@@ -65,20 +65,23 @@
     <script>
         async function createAnalyst() {
             var analystMatricula = document.getElementById("analystMatricula").value;
+            var userId = sessionStorage.getItem('userId');
 
             try {
-                var response = await fetch('http://0.0.0.0:8000/admin/criarAnalista', {
+                var response = await fetch('http://0.0.0.0:8000/matricula/create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
+                        usuario_id: userId,
                         matricula: analystMatricula
                     }),
                 });
 
                 if (response.ok) {
                     console.log('Matrícula do analista criada com sucesso!');
+                    window.location.href = 'historico.html';
                     // Você pode redirecionar para outra página ou realizar outras ações necessárias.
                 } else {
                     console.error('Falha ao criar a matrícula do analista');
