@@ -56,9 +56,6 @@
 <body>
 
     <form id="createAnalystForm">
-        <label for="analystName">Nome do Analista:</label>
-        <input type="text" id="analystName" name="analystName" required>
-
         <label for="analystMatricula">Número de Matrícula:</label>
         <input type="text" id="analystMatricula" name="analystMatricula" required>
 
@@ -67,7 +64,6 @@
 
     <script>
         async function createAnalyst() {
-            var analystName = document.getElementById("analystName").value;
             var analystMatricula = document.getElementById("analystMatricula").value;
 
             try {
@@ -77,7 +73,6 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        nome: analystName,
                         matricula: analystMatricula
                     }),
                 });

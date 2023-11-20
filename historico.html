@@ -46,6 +46,8 @@
     <a href="requisicoes.html">Voltar para Solicitações</a>
 
     <h1>Histórico de Tickets</h1>
+    <!-- Botão para a página de administrador -->
+    <button id="adminButton" onclick="goToAdminPage()">Cadastrar Matricula</button>
 
     <table>
         <thead>
@@ -171,6 +173,20 @@
 
         // Chame a função ao carregar a página
         window.onload = populateTicketHistory;
+
+        // Lógica para mostrar o botão de admin apenas se o usuário for administrador
+        window.onload = function () {
+            var userRole = sessionStorage.getItem('userRole');
+
+            if (userRole && userRole.toLowerCase() === 'administrador') {
+                document.getElementById('adminButton').style.display = 'block';
+            }
+        };
+
+        // Função para redirecionar para a página de administrador
+        function goToAdminPage() {
+            window.location.href = 'administrador.html';
+        }
     </script>
 
 
