@@ -111,6 +111,10 @@
                     <label for="registerMatricula">Número de Matrícula:</label>
                     <input type="text" id="registerMatricula" name="registerMatricula" required>
                 </div>
+                <div id="setorField" style="display: none;">
+                    <label for="registerSetor">Setor:</label>
+                    <input type="text" id="registerSetor" name="registerSetor" required>
+                </div>
 
 
                 <div>
@@ -213,19 +217,49 @@
             var role = document.getElementById("registerRole").value;
 
             try {
-                var response = await fetch('http://0.0.0.0:8000/solicitante/create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        nome: username,
-                        senha: password,
-                        email: email,
-                        telefone: phone,
-                        role: role
-                    }),
-                });
+
+                switch (role) {
+                    case 'solicitante':
+                        var response = await fetch('http://0.0.0.0:8000/solicitante/create', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                nome: username,
+                                senha: password,
+                                email: email,
+                                telefone: phone,
+                                role: role
+                            }),
+                        });
+
+                        break;
+                    case 'analista':
+                        var matricula = document.getElementById("registerMatricula").value;
+                        var setor = document.getElementById("registerSetor").value;
+
+                        var response = await fetch('http://0.0.0.0:8000/analista/create', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                nome: username,
+                                senha: password,
+                                email: email,
+                                telefone: phone,
+                                role: role,
+                                matricula: matricula,
+                                setor: setor
+                            }),
+                        });
+
+                        break;
+                    default:
+                        break;
+                }
+
 
                 if (response.ok) {
                     // O registro foi bem-sucedido, você pode redirecionar o usuário ou realizar outras ações necessárias.
@@ -248,11 +282,14 @@
         function toggleMatriculaField() {
             var roleSelect = document.getElementById("registerRole");
             var matriculaField = document.getElementById("matriculaField");
+            var setorField = document.getElementById("setorField");
 
             if (roleSelect.value === "analista") {
                 matriculaField.style.display = "block";
+                setorField.style.display = "block";
             } else {
                 matriculaField.style.display = "none";
+                setorField.style.display = "none";
             }
         }
 
