@@ -81,6 +81,7 @@
                 <th>Data</th>
                 <th id="detalhesHeader">Detalhes</th>
                 <th id="resolveTicketHeader">Responder</th>
+                <th id="marcaResolvido">Marcar Como Resolvido</th>
             </tr>
         </thead>
         <tbody id="ticketHistory">
@@ -141,6 +142,7 @@
                 var role = sessionStorage.getItem('userRole');
 
                 document.getElementById('resolveTicketHeader').style.display = 'none';
+                document.getElementById('marcaResolvido').style.display = 'none';
 
                 switch (role) {
                     case 'solicitante':
@@ -157,8 +159,6 @@
 
                         break;
                     case 'analista':
-
-                        document.getElementById('resolveTicketHeader').style.display = 'table-cell';
 
                         var response = await fetch('http://0.0.0.0:8000/analista/tickets', {
                             method: 'POST',
@@ -193,9 +193,7 @@
                     var ticketHistoryData = await response.json();
 
                     var tableBody = document.getElementById('ticketHistory');
-                    tableBody.innerHTML = ''; // Limpa a tabela antes de adicionar os novos dados
-
-                    // ...
+                    tableBody.innerHTML = '';
 
                     ticketHistoryData.forEach(function (ticket) {
                         var row = document.createElement('tr');
@@ -235,7 +233,9 @@
                         row.appendChild(dataCell);
                         row.appendChild(detalhesCeil);
 
-                        if (role === 'analista' || (role == 'solicitante' && ticket.status == 'EM ANDAMENTO')) {
+                        if ((role == 'analista' && ticket.status == 'CRIADO') || (role == 'solicitante' && ticket.status == 'EM ANDAMENTO')) {
+                            document.getElementById('resolveTicketHeader').style.display = 'table-cell';
+                            document.getElementById('marcaResolvido').style.display = 'table-cell';
                             var resolveTicketCell = document.createElement('td');
                             var resolveButton = document.createElement('button');
                             resolveButton.textContent = 'Responder';
@@ -245,11 +245,24 @@
                             resolveTicketCell.appendChild(resolveButton);
                             row.appendChild(resolveTicketCell);
                         }
+                        if (role === 'solicitante' && ticket.status === 'EM ANDAMENTO') {
+                            document.getElementById('marcaResolvido').style.display = 'table-cell';
+                            var checkboxCell = document.createElement('td');
+                            var checkbox = document.createElement('input');
+                            checkbox.type = 'checkbox';
 
+                            // Add an event listener to the checkbox
+                            checkbox.addEventListener('change', function () {
+                                // Call a function to handle checkbox change
+                                handleCheckboxChange(ticket.id, userId, ticket.status, checkbox.checked);
+                            });
+
+                            checkboxCell.appendChild(checkbox);
+                            row.appendChild(checkboxCell);
+                        }
                         tableBody.appendChild(row);
                     });
 
-                    // ...
 
                 } else {
                     console.error('Falha ao obter dados do histórico:', response.statusText);
@@ -266,6 +279,23 @@
             enviarMensagem.onclick = function () {
                 enviarResposta(ticketId, userId, status);
             };
+        }
+
+
+        async function handleCheckboxChange(ticketId, userId, status, isChecked) {
+            if (isChecked) {
+                await fetch('http://0.0.0.0:8000/solicitante/' + ticketId + '/status', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        status: 'RESOLVIDO'
+                    })
+                });
+            }
+            populateTicketHistory();
+
         }
 
         async function enviarResposta(ticketId, userId, status) {
@@ -300,6 +330,8 @@
 
 
             $('#responderModal').modal('hide');
+
+            populateTicketHistory();
         }
 
         async function detalhesTicket(ticketId) {
