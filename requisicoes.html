@@ -77,18 +77,14 @@
             <option value="manutencao">Manutenção</option>
             <option value="limpeza">Limpeza</option>
             <option value="seguranca">Segurança</option>
-            <!-- Adicione outros tipos conforme necessário -->
         </select>
 
-        <!-- Novo select para os locais -->
         <label for="requestLocation">Local:</label>
         <select id="requestLocation" name="requestLocation" required></select>
 
-        <!-- Campo para a descrição -->
         <label for="RequestDescription">Descrição:</label>
         <input type="text" id="RequestDescription" name="RequestDescription" required>
 
-        <!-- Campo para a imagem -->
         <label for="imageInput">Escolha uma imagem:</label>
         <input type="file" id="imageInput" name="imageInput" accept="image/*">
 
@@ -97,10 +93,9 @@
             <a href="historico.html" class="history-link">Ver Histórico</a>
         </div>
     </form>
-    
+
 
     <script>
-        // Lógica para mostrar o botão de admin apenas se o usuário for administrador
         window.onload = function () {
             var userRole = sessionStorage.getItem('userRole');
 
@@ -109,18 +104,15 @@
             }
         };
 
-        // Função para redirecionar para a página de administrador
         function goToAdminPage() {
             window.location.href = 'administrador.html';
         }
-        // Função para carregar dinamicamente os locais no select
         async function loadLocations() {
             try {
                 var response = await fetch('http://0.0.0.0:8000/locais/', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        // Adicione outros cabeçalhos conforme necessário
                     },
                 });
 
@@ -142,33 +134,26 @@
             }
         }
 
-        // Chame a função para carregar locais ao carregar a página
         window.onload = loadLocations;
 
-        // Função para enviar a solicitação
         function submitRequest() {
             var userId = sessionStorage.getItem('userId');
             var requestType = document.getElementById("requestType").value;
             var requestLocation = document.getElementById("requestLocation").value;
             var requestDescription = document.getElementById("RequestDescription").value;
 
-            // Obter a referência para o campo de input de arquivo
             var imageInput = document.getElementById('imageInput');
-            // Obter o arquivo de imagem selecionado
             var selectedImage = imageInput.files[0];
 
-            // Criar um objeto FormData e adicionar a imagem a ele
             var formData = new FormData();
             formData.append('imagem', selectedImage);
 
-            // Adicionar outros campos ao FormData, se necessário
             formData.append('solicitante_id', userId);
             formData.append('tipo', requestType);
             formData.append('local_id', requestLocation);
             formData.append('status', 'CRIADO');
             formData.append('descricao', requestDescription);
 
-            // Simulação do envio para o backend (substitua por lógica real)
             fetch('http://0.0.0.0:8000/solicitante/criarTicket', {
                 method: 'POST',
                 body: formData,
@@ -176,11 +161,10 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Solicitação enviada com sucesso:', data);
-                // Limpar campos após o envio, se necessário
                 document.getElementById("requestType").value = "";
                 document.getElementById("requestLocation").value = "";
                 document.getElementById("RequestDescription").value = "";
-                imageInput.value = ""; // Limpar o campo de arquivo
+                imageInput.value = "";
             })
             .catch(error => {
                 console.error('Erro ao enviar a solicitação:', error);

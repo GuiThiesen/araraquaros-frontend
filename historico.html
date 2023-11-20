@@ -19,7 +19,6 @@
             height: 100vh;
             margin: 0;
             flex-direction: column;
-            /* Adicionando flex-direction para empilhar verticalmente */
         }
 
         .back-link {
@@ -65,6 +64,7 @@
 <body>
 
     <a href="requisicoes.html">Voltar para Solicitações</a>
+    <button id="adminButton" style="display: none;">Cadastrar Matrícula </button>
 
     <h1>Histórico de Tickets</h1>
 
@@ -85,7 +85,6 @@
             </tr>
         </thead>
         <tbody id="ticketHistory">
-            <!-- Aqui serão adicionados dinamicamente os tickets do histórico -->
         </tbody>
     </table>
     <div class="modal fade" id="detalhesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -99,7 +98,6 @@
                     </button>
                 </div>
                 <div class="modal-body" id="mensagemContainer">
-                    <!-- Aqui será adicionado dinamicamente as mensagens -->
                 </div>
             </div>
         </div>
@@ -115,7 +113,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- Input para a mensagem -->
                     <div class="form-group">
                         <label for="respostaTicket">Mensagem:</label>
                         <textarea class="form-control" id="respostaTicket" rows="3"></textarea>
@@ -133,10 +130,8 @@
 
     <script>
 
-        // Função para popular a tabela com os dados do histórico
         async function populateTicketHistory() {
             try {
-                // Obtenha o userId do sessionStorage
                 var userId = sessionStorage.getItem('userId');
                 var isAdmin = sessionStorage.getItem('admin');
                 var role = sessionStorage.getItem('userRole');
@@ -150,7 +145,6 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                // Adicione outros cabeçalhos conforme necessário
                             },
                             body: JSON.stringify({
                                 usuario_id: userId
@@ -164,7 +158,6 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                // Adicione outros cabeçalhos conforme necessário
                             },
                             body: JSON.stringify({
                                 usuario_id: userId
@@ -176,7 +169,6 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                // Adicione outros cabeçalhos conforme necessário
                             },
                             body: JSON.stringify({
                                 usuario_id: userId
@@ -187,7 +179,6 @@
                     default:
                         break;
                 }
-
 
                 if (response.ok) {
                     var ticketHistoryData = await response.json();
@@ -235,7 +226,6 @@
 
                         if ((role == 'analista' && ticket.status != 'RESOLVIDO') || (role == 'solicitante' && ticket.status == 'EM ANDAMENTO')) {
                             document.getElementById('resolveTicketHeader').style.display = 'table-cell';
-                            document.getElementById('marcaResolvido').style.display = 'table-cell';
                             var resolveTicketCell = document.createElement('td');
                             var resolveButton = document.createElement('button');
                             resolveButton.textContent = 'Responder';
@@ -251,9 +241,7 @@
                             var checkbox = document.createElement('input');
                             checkbox.type = 'checkbox';
 
-                            // Add an event listener to the checkbox
                             checkbox.addEventListener('change', function () {
-                                // Call a function to handle checkbox change
                                 handleCheckboxChange(ticket.id, userId, ticket.status, checkbox.checked);
                             });
 
@@ -266,6 +254,14 @@
 
                 } else {
                     console.error('Falha ao obter dados do histórico:', response.statusText);
+                }
+
+                if (role == 'administrador') {
+                    document.getElementById('adminButton').style.display = 'block';
+
+                    document.getElementById('adminButton').onclick = function () {
+                        window.location.href = 'administrador.html';
+                    };
                 }
             } catch (error) {
                 console.error('Erro ao obter dados do histórico:', error);
@@ -319,7 +315,6 @@
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        // Adicione outros cabeçalhos conforme necessário
                     },
                     body: JSON.stringify({
                         analista_id: userId,
@@ -341,7 +336,6 @@
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    // Adicione outros cabeçalhos conforme necessário
                 }
             });
             if (response.ok) {
@@ -354,13 +348,10 @@
 
                 });
 
-                // Exibe o modal
                 $('#detalhesModal').modal('show');
             }
         }
 
-
-        // Chame a função ao carregar a página
         window.onload = populateTicketHistory;
     </script>
 

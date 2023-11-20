@@ -50,7 +50,6 @@
             background-color: #45a049;
         }
 
-        /* Estilo adicional para botões de login e cadastro */
         #loginForm button {
             margin-top: 10px;
         }
@@ -69,7 +68,6 @@
             <li><a href="#registerTab">Cadastro</a></li>
         </ul>
 
-        <!-- Login Tab -->
         <div id="loginTab">
             <form id="loginForm">
                 <label for="loginUsername">Usuário:</label>
@@ -82,7 +80,6 @@
             </form>
         </div>
 
-        <!-- Register Tab -->
         <div id="registerTab">
             <form id="registerForm">
                 <label for="registerUsername">Usuário:</label>
@@ -97,8 +94,6 @@
                 <label for="registerPhone">Telefone:</label>
                 <input type="tel" id="registerPhone" name="registerPhone" required>
 
-                <!-- Corrigindo a abertura e fechamento do div para a "Role" -->
-                <!-- Corrigindo a abertura e fechamento do div para a "Role" -->
                 <div>
                     <label for="registerRole">Role:</label>
                     <select id="registerRole" name="registerRole" required onchange="toggleMatriculaField()">
@@ -132,11 +127,8 @@
     </form>
     </div>
 
-    <!-- Adicione outros tipos conforme necessário -->
-
 
     <script>
-        // Adiciona a funcionalidade de abas (tabs)
         document.getElementById("tabs").addEventListener("click", function (event) {
             if (event.target.tagName === "A") {
                 var tabId = event.target.getAttribute("href").substr(1);
@@ -153,7 +145,6 @@
             document.getElementById(tabId).style.display = "block";
         }
 
-        // Mostra a aba de login por padrão
         showTab("loginTab");
 
         async function login() {
@@ -175,14 +166,12 @@
                 });
 
                 if (response.ok) {
-                    // O login foi bem-sucedido, redirecione o usuário para a página de requisições.
                     console.log('Login bem-sucedido!');
                     var responseData = await response.json();
-                    var userId = responseData.id; // Substitua 'id' pelo nome real do campo que contém o ID na resposta
-                    var admin = responseData.admin; // Substitua 'id' pelo nome real do campo que contém o ID na resposta
-                    var role = responseData.role; // Substitua 'id' pelo nome real do campo que contém o ID na resposta
+                    var userId = responseData.id;
+                    var admin = responseData.admin;
+                    var role = responseData.role;
 
-                    // Armazene o ID do usuário na sessionStorage
                     sessionStorage.setItem('userId', userId);
                     sessionStorage.setItem('admin', admin);
                     sessionStorage.setItem('userRole', role);
@@ -204,7 +193,6 @@
                     }
 
                 } else {
-                    // O login falhou, você pode exibir uma mensagem de erro para o usuário.
                     console.error('Falha no login');
                 }
             } catch (error) {
@@ -212,7 +200,6 @@
             }
         }
 
-        //Logica de registro do usuário
         async function register() {
             var username = document.getElementById("registerUsername").value;
             var password = document.getElementById("registerPassword").value;
@@ -266,11 +253,9 @@
 
 
                 if (response.ok) {
-                    // O registro foi bem-sucedido, você pode redirecionar o usuário ou realizar outras ações necessárias.
                     console.log('Cadastro bem-sucedido!');
 
                 } else {
-                    // O registro falhou, você pode exibir uma mensagem de erro para o usuário.
                     console.error('Falha no cadastro');
                 }
             } catch (error) {
